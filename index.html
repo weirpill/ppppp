@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>For P5</title>
+        <style>
+            .mid {
+                display: flex;
+                flex-direction: column;
+                justify-content:center;
+                align-content: center;
+                height: 150px;
+                width:300px;
+                margin: auto;
+            }
+
+            .iptarea {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                border: 5px black solid;
+            }
+
+            .btm {
+                padding-left: 30px;
+                padding-right: 30px;
+            }
+            .btm1 {
+                padding-left: 30px;
+                padding-right: 30px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #jsb {
+                margin: auto;
+                font-size: 50px;
+            }
+
+            #Delete {
+                margin: auto;
+                margin-top: 20px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            #htmlsource {
+                height: 200px;
+                font-size: 20px;
+            }
+
+            body {
+                margin-top: 70px;
+                display: flex;
+                flex-direction: column;
+                align-content: center;
+                justify-content:center;
+                background-color: rgb(255, 243, 203);
+            }
+        </style>
+        
+        <script>
+            function penter(e,screen){
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if(code == 13) { 
+                con();
+                }
+            }
+
+            function con() {
+                const a = ['y', 'z', '{', '|', '}', '~', '%7f', '%80', '%81', '%82'];
+                const b = ['s', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{','|'];
+                const c = [4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D'];
+                const ipt = new Array(12);
+                const apst = [0, 4, 8];
+                const bpst = [1, 3, 5, 7, 9, 11];
+                const cpst = [2, 6, 10];
+                const ipts = document.getElementById('icnum').value;
+                const inter = ipts[6]=='M'||ipts[6]=='F';
+                for (let k = 0; k < ipts.length; k++) {
+                    if (!isNaN(parseInt(ipts[k]))) {
+                    ipt[k] = parseInt(ipts[k]);
+                    } else {
+                        ipt[k] = ipts[k];
+                    }
+                }
+                for (let i = 0; i<ipt.length; i++) {
+                    if (apst.includes(i)) {
+                        ipt[i] = a[ipt[i]];
+                    } else if (bpst.includes(i)) {
+                        ipt[i] = b[ipt[i]];
+                    } else if (ipt[i]=='M'){
+                        ipt[i] = '%A1';
+                    } else if (ipt[i]=='F'){
+                        ipt[i] = '%9A';
+                    } else {
+                        ipt[i] = c[ipt[i]];
+                    }
+                }
+                const opts = document.getElementById('optnum');
+                if (inter) {
+                    opts.value = ipt[0]+ipt[1]+'%8'+ipt[2]+ipt[3]+ipt[4]+ipt[5]
+                                 +ipt[6]+ipt[7]+ipt[8]+ipt[9]+'%8'+ipt[10]+ipt[11];
+                } else {
+                    opts.value = ipt[0]+ipt[1]+'%8'+ipt[2]+ipt[3]+ipt[4]+ipt[5]+'%8'
+                    +ipt[6]+ipt[7]+ipt[8]+ipt[9]+'%8'+ipt[10]+ipt[11];
+                }
+                const url = "view-source:https://intake02.utm.my/semakan/docs/utmp5.all.asp?kat=stpm&nokp="+opts.value;
+                const gturl = document.getElementById('showurl');
+                const inst = document.getElementById('instruct');
+                inst.innerText = "Copy and goto (including view-source) :";
+                gturl.innerHTML = url ;
+                const sic = document.getElementById('showic');
+                sic.innerText = ipts
+                navigator.clipboard.writeText(url)
+            }
+
+            function dlt() {
+                const shic = document.getElementById('showic');
+                const iptsic = shic.innerText;
+                const imghtml = '<img src="http://academic.utm.my/UGStudent/PhotoStudent.ashx?nokp='+iptsic+'" class="img-profile" width="300" alt="profileimage" />';
+                const ftml = document.getElementById('htmlsource');
+                fhtml = ftml.value;
+                text = ['<script>', 'function cetak()', '{','alert("Maklumat berjaya dihantar, Sila cetak 2 salinan dan tandatangan borang ini untuk dihantar satu salinan di kaunter kolej pada hari pendaftaran dan satu salinan di kaunter fakulti semasa pendaftaran program.\\nMaklumat ini boleh dikemaskini semula jika ada pindaan sebelum menyerahkan borang UTMP5.\\nAnda perlu REFRESH menu E-TAWARAN untuk ke menu seterusnya.");','window.print();', 'history.back();', '}', 'function cetak2()','document.getElementById("butang_cetak").style.display = "none"	;','document.getElementById("butang_cetak").style.display = "block"	;','<//script>',"''","''","''",'<script>','<//script>','{','{','}','}','window.print();', 'history.back();','history.back();','alert("Maaf! Kemaskini rekod TIDAK BERJAYA.\\nSila cuba lagi.");']
+                for (let k = 0; k<text.length; k++) {
+                fhtml = fhtml.replace(text[k],"");
+                }
+                ftml.value = imghtml+fhtml;
+                navigator.clipboard.writeText(ftml.value)
+            }
+        </script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+    </head>
+    <body onkeydown="penter(event,screen)">
+        <div class="mid">
+            <div>
+                <p style="display: inline; font-size: 20px;"><b>ic :</b></p>
+                <input id="icnum" type="text" style="display: inline; width:200px;height: 20px; margin-left: 55px;font-size: 18px;"> <br/><br/>
+                <p style="display: inline; font-size: 20px;"><b>output :</b></p>
+                <input id="optnum" type="text" readonly style="display: inline; width:200px;height: 20px; margin-left: 13px;font-size: 18px;">
+            </div> <br/>
+            <button id="convert" onclick="con()" style="height: 50px;font-size: 20px;">Convert (or press Enter)</button>
+        </div>
+        <div class="btm">
+            <p id="instruct"></p>
+            <p id="showurl" style="color: blue;"></p>
+            <p id="showic" style="display: inline; font-size: 17px;"></p>
+        </div>
+        <div class = "btm1">
+            <textarea id="htmlsource" placeholder="Copy all content from view-source page and paste here"></textarea>
+            <button id="Delete" onclick="dlt()">Copy (Delete function cetak and add img)</button>
+            <br/>
+        </div>
+        <a href="https://jsbin.com/?html,output" target=”_blank id="jsb">JSbin</a>
+    </body>
+</html>
